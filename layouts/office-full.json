@@ -1,0 +1,8 @@
+{
+  "id": "root",
+  "type": "column",
+  "preview": "layouts/office-full.svg",
+  "children": [
+    { "id": "office", "type": "block", "content": { "mod": "office-top" } }
+  ]
+}

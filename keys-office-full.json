@@ -1,0 +1,4 @@
+{
+  "global": { "ctrl-shift-i": "layout.switch:office-full" },
+  "layout:office-full": { "ctrl-shift-i": "layout.switch:main", "escape": "layout.switch:main" }
+}
