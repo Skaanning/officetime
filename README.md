@@ -24,7 +24,7 @@ Hover over an agent to see its tab, program, status and how long it has been idl
 
 1. Copy `layouts/office-full.json` and `layouts/office-full.svg` into `~/.config/herdr-app/layouts/`.
 2. Copy `mods/office-top/` into `~/.config/herdr-app/mods/`.
-3. Merge `keys-office-full.json` into `~/.config/herdr-app/keys.json`:
+3. Merge `keys.json` into `~/.config/herdr-app/keys.json`:
    - `ctrl-shift-i` opens the office from anywhere.
    - `ctrl-shift-i` or `Esc` takes you back to the `main` layout.
 4. Run `herdr-app check ~/.config/herdr-app/mods/office-top`.
@@ -48,4 +48,4 @@ The mod only reads Herdr's own data. It makes no network requests, runs no progr
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE). [RECIPE.md](RECIPE.md) describes everything it does and how it's built.
