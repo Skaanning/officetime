@@ -41,9 +41,10 @@ The whole window is one mod (`office-top`). It draws a floor plan of 44 × 25 ti
 - **Blocked:** at the desk, with a hand raised and a red pulsing ring. A red "!" bubble shows, and after 5 minutes (`ALARM_AFTER`) it becomes a fast-blinking "HELP!!".
 - **Done:** at the desk, with a green ring, a "✓ done" bubble and confetti falling over the desk, until you look at the terminal and it turns idle.
 - **Idle:**
-  - The agent leaves its desk for a hangout, picked by weight: coffee, fridge, water cooler (with chat bubbles), kitchen table, ping pong, arcade, beanbags, couch, windows, whiteboards, printer, or a spot in the hallway.
+  - The agent leaves its desk for a hangout, picked by weight: coffee, fridge, water cooler, kitchen table, ping pong, arcade, beanbags, couch, windows, whiteboards, printer, or a spot in the hallway.
+  - Once there, every 7 s it has a one-in-three chance of saying something in a wide white bubble. Half the time it's general tech babble (`BABBLE`): agents joking about being agents, and debugging war stories. The other half it's a line about the spot it's at (`SPOT_BABBLE`, by spot name without the number), such as "brewing a hotfix" at the coffee machine or "ping… pong… ACK" at the table. Hallway strolls only use the general lines.
   - It stays 45–120 s (`STAY`) and then moves on. With both ping pong spots taken, a ball bounces between the two paddles.
-  - After 10 idle minutes (`NAP_AFTER`) it takes a couch seat or a beanbag for 5 minutes, with a floating "z z".
+  - After 10 idle minutes (`NAP_AFTER`) it takes a couch seat or a beanbag for 5 minutes, with a floating "z z" (now and then "z z · collecting garbage").
   - An idle agent whose sub-agents (`hc run`, the terminal's `parent`) are still live stays in its chair.
 - **Walking:** people walk at 3.4 tiles/s, one straight leg at a time. A walk goes out along one spot's path to the hallway, along it, and in along the other spot's path, so nobody crosses furniture or walls. Feet swing while walking.
 - **Arrivals and departures:** new agents come in at the front door. Closed agents walk out to it carrying a box.

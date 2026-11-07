@@ -12,7 +12,7 @@ The floor plan has a meeting room, a game room, a kitchen and a lounge off a lon
 - **Working:** the agent sits at its desk and types, with code scrolling on its screen.
 - **Blocked:** a raised hand, a pulsing red ring and a "!" that turns into "HELP!!" after five minutes.
 - **Done:** a green check and confetti, until you open that agent's terminal in Herdr.
-- **Idle:** the agent gets up and runs around. It goes for coffee, chats at the water cooler, raids the fridge, plays ping pong or the arcade, looks out the window, or sinks into a beanbag. After ten idle minutes it naps on the couch. An idle agent stays in its chair while agents it started with `hc run` are still running.
+- **Idle:** the agent gets up and runs around. It goes for coffee, chats at the water cooler, raids the fridge, plays ping pong or the arcade, looks out the window, or sinks into a beanbag. Now and then it says something in a speech bubble: tech babble, or a joke about where it is. After ten idle minutes it naps on the couch. An idle agent stays in its chair while agents it started with `hc run` are still running.
 - **Remote agents**, running on another machine connected to Herdr, sit at the meeting room table on laptops.
 - **New agents** walk in through the front door. When you close an agent's terminal, it walks out carrying a box.
 - **Day and night** follow the clock: pink at dawn, sunlight through the windows by day, an orange dusk, then dimmed lights and desk lamps at night.

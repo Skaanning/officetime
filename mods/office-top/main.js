@@ -48,7 +48,26 @@ const SHIRTS = ["#ef8354", "#4c8bf5", "#4caf7a", "#8e6bd8", "#f2c14e", "#e9698f"
 // Mug colors by program (anything else gets a plain cream mug).
 const MUGS = { claude: "#cc785c", codex: "#f1f1f1", gemini: "#5b8def", cursor: "#333438", opencode: "#4fb07a", amp: "#a07ad6", aider: "#e5b84b" };
 const CONFETTI = ["#ff6b6b", "#ffd166", "#06d6a0", "#4cc9f0", "#b388ff", "#ff8fab"];
-const CHAT = ["mm", "☕", "nice one", "lunch?", "🥯", "it works!", "lol", "one sec", "merge it", "rebase?", "🙌", "huh"];
+// What idle agents say now and then, wherever they hang out: half the time a line about the spot they're at.
+const BABBLE = [
+  "my context is full", "you're absolutely right", "compacting…", "87% confident", "hallucinated a lib",
+  "rate limited 😴", "let me re-read that", "tokens are tight", "tool call failed", "I'll just grep it",
+  "it's always DNS", "off by one. again.", "git blame says me", "it was the cache", "now I have 2 regexes",
+  "null is a lie", "heisenbug 👻", "works in prod only", "who wrote this? oh.",
+];
+const SPOT_BABBLE = {
+  coffee: ["brewing a hotfix", "Java ☕ lol", "caffeine.js loaded", "espresso-driven dev"],
+  fridge: ["who ate my cache?", "cold storage", "expired: 2019", "LRU evicted my lunch"],
+  cooler: ["heard prod is down?", "who pushed to main?", "hydrating the DOM", "standup ran 40 min"],
+  ktable: ["lunch && learn", "sandwich.yaml", "eating my own dogfood", "byte-sized snack"],
+  ping: ["ping… pong… ACK", "packet loss!", "200 OK", "TTL expired"],
+  arcade: ["speedrunning CI", "insert token", "high score: 0 bugs", "1UP: one more retry"],
+  window: ["the cloud is real", "touching grass.exe", "outside: 404", "sun.js is laggy"],
+  bean: ["thinking in O(1)", "await vibes()", "blocking on nothing", "low-power mode"],
+  couch: ["horizontal scaling", "idle by design", "cold start pending"],
+  board: ["boxes and arrows", "this is the arch", "it's microservices now", "draw.io was down"],
+  printer: ["PC LOAD LETTER?!", "printf debugging", "paper jam in prod"],
+};
 const CODE = ["#8be9c7", "#ffc978", "#a5b4ff", "#ff9ec7"];
 // Desk finishes ([edge, top]) and the things people keep on them (null: nothing there).
 const FINISHES = [["#7a5c40", "#a3825e"], ["#5a3f2c", "#7d5a3f"], ["#9aa0a8", "#e2e5e9"], ["#5f636c", "#82878f"], ["#8a6a4a", "#c49a6c"], ["#3f4a5a", "#56657a"]];
@@ -884,7 +903,7 @@ export default class OfficeTop extends View {
     const U = this.U;
     const atDesk = w.arrived && w.goal.startsWith("desk:");
     const els = [];
-    const bubble = (text, bg, fg = "#fff") => div().absolute().left(0.5 * U - 1.4 * U).w(2.8 * U).top(-1.05 * U).flex().justify_center()
+    const bubble = (text, bg, fg = "#fff", wide = 2.8) => div().absolute().left(0.5 * U - wide / 2 * U).w(wide * U).top(-1.05 * U).flex().justify_center()
       .child(div().px(Math.max(4, 0.14 * U)).py(1).rounded(0.2 * U).bg(bg).text_color(fg).text_size(Math.max(10, 0.3 * U)).font_semibold().child(text));
     if (atDesk && a.status === "blocked") {
       const long = now - (this.blockedSince[a.address] ?? now) > ALARM_AFTER;
@@ -897,9 +916,13 @@ export default class OfficeTop extends View {
           .child("·").frames(["·  ", "·· ", "···"], 380)));
     } else if (w.arrived) {
       const h = this.hang[a.address];
-      if (h?.nap) els.push(bubble("z z", "#3b3f4cd0").loop("top", { from: -1.05 * U, to: -1.25 * U, period: 2200 }));
-      else if (h && /cooler|ktable|coffee/.test(w.goal) && (Math.floor(now / 7000) + (hash(a.address) % 3)) % 3 === 0)
-        els.push(bubble(CHAT[(Math.floor(now / 7000) + hash(a.address)) % CHAT.length], "#ffffffe0", "#3a3f4c"));
+      const tick = Math.floor(now / 7000) + hash(a.address);
+      if (h?.nap) els.push(bubble(tick % 4 ? "z z" : "z z · collecting garbage", "#3b3f4cd0", "#fff", 4.6).loop("top", { from: -1.05 * U, to: -1.25 * U, period: 2200 }));
+      else if (h && tick % 3 === 0) {
+        const here = SPOT_BABBLE[w.goal.replace(/(\d+|L|R)$/, "")];
+        const lines = here && tick % 2 ? here : BABBLE;
+        els.push(bubble(lines[Math.floor(tick / 3) % lines.length], "#ffffffe0", "#3a3f4c", 4.6));
+      }
     }
     // A name tag under them: the tab at their desk, space and tab when they're up and about.
     const tag = atDesk ? a.tab_name : `${a.space_name} · ${a.tab_name}`;
