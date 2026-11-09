@@ -44,7 +44,7 @@ The whole window is one mod (`office-top`). It draws a floor plan of 44 × 25 ti
   - The agent leaves its desk for a hangout, picked by weight: coffee, fridge, water cooler, kitchen table, ping pong, arcade, beanbags, couch, windows, whiteboards, printer, or a spot in the hallway.
   - Once there, every 7 s it has a one-in-three chance of saying something in a wide white bubble. Half the time it's general tech babble (`BABBLE`): agents joking about being agents, and debugging war stories. The other half it's a line about the spot it's at (`SPOT_BABBLE`, by spot name without the number), such as "brewing a hotfix" at the coffee machine or "ping… pong… ACK" at the table. Hallway strolls only use the general lines.
   - It stays 45–120 s (`STAY`) and then moves on. With both ping pong spots taken, a ball bounces between the two paddles.
-  - After 10 idle minutes (`NAP_AFTER`) it takes a couch seat or a beanbag for 5 minutes, with a floating "z z" (now and then "z z · collecting garbage").
+  - After 10 idle minutes (`NAP_AFTER`) each new stop has a 30% chance (`NAP_CHANCE`) of being a nap, never two in a row: a random free couch seat or beanbag for 5 minutes, with a floating "z z" (now and then "z z · collecting garbage").
   - An idle agent whose sub-agents (`hc run`, the terminal's `parent`) are still live stays in its chair.
 - **Walking:** people walk at 3.4 tiles/s, one straight leg at a time. A walk goes out along one spot's path to the hallway, along it, and in along the other spot's path, so nobody crosses furniture or walls. Feet swing while walking.
 - **Arrivals and departures:** new agents come in at the front door. Closed agents walk out to it carrying a box.
@@ -75,7 +75,7 @@ The whole window is one mod (`office-top`). It draws a floor plan of 44 × 25 ti
 - **Size:** taken from `on_size_change` on the root `div`.
 - **Movement:** walkers are redrawn at each leg's target with `.transition("left" | "top", { duration, easing: "linear" })`. A timer runs once per leg, so the next leg starts when this one ends. Everything else that moves is native: `.loop(...)` for typing, feet, tails, confetti, the ping pong ball and pulsing rings, and `.frames(...)` for the typing bubble.
 - **Timers:** every 2.5 s (idle stays and the dog), and every 30 s for the clock (faster with `DAY_LENGTH`). No timer drives animation.
-- **Settings:** constants at the top of `main.js`: `WORKSPACE`, `DEMO` (pretend agents in every state), `DAY_LENGTH`, `DOG_NAME`, `PERSON`, `SPEED`, `STAY`, `NAP_AFTER` and `ALARM_AFTER`.
+- **Settings:** constants at the top of `main.js`: `WORKSPACE`, `DEMO` (pretend agents in every state), `DAY_LENGTH`, `DOG_NAME`, `PERSON`, `SPEED`, `STAY`, `NAP_AFTER`, `NAP_CHANCE` and `ALARM_AFTER`.
 - **No programs, network or files:** it runs no programs, makes no network requests and touches no files.
 
 ## Watch out

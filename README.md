@@ -12,7 +12,7 @@ The floor plan has a meeting room, a game room, a kitchen and a lounge off a lon
 - **Working:** the agent sits at its desk and types, with code scrolling on its screen.
 - **Blocked:** a raised hand, a pulsing red ring and a "!" that turns into "HELP!!" after five minutes.
 - **Done:** a green check and confetti, until you open that agent's terminal in Herdr.
-- **Idle:** the agent gets up and runs around. It goes for coffee, chats at the water cooler, raids the fridge, plays ping pong or the arcade, looks out the window, or sinks into a beanbag. Now and then it says something in a speech bubble: tech babble, or a joke about where it is. After ten idle minutes it naps on the couch. An idle agent stays in its chair while agents it started with `hc run` are still running.
+- **Idle:** the agent gets up and runs around. It goes for coffee, chats at the water cooler, raids the fridge, plays ping pong or the arcade, looks out the window, or sinks into a beanbag. Now and then it says something in a speech bubble: tech babble, or a joke about where it is. After ten idle minutes it naps on the couch now and then, between rounds of the office. An idle agent stays in its chair while agents it started with `hc run` are still running.
 - **Remote agents**, running on another machine connected to Herdr, sit at the meeting room table on laptops.
 - **New agents** walk in through the front door. When you close an agent's terminal, it walks out carrying a box.
 - **Day and night** follow the clock: pink at dawn, sunlight through the windows by day, an orange dusk, then dimmed lights and desk lamps at night.
@@ -41,7 +41,8 @@ Constants at the top of `mods/office-top/main.js`:
 | `DOG_NAME` | `"Waffles"` | The dog's name |
 | `PERSON` | `1.55` | How big people are |
 | `STAY` | 45–120 s | How long an idle agent stays somewhere before moving on |
-| `NAP_AFTER` | 10 min | Idle time before an agent naps |
+| `NAP_AFTER` | 10 min | Idle time before an agent starts taking naps |
+| `NAP_CHANCE` | `0.3` | Once tired, how often its next stop is a nap (never two in a row) |
 | `ALARM_AFTER` | 5 min | Blocked time before the HELP!! alarm |
 
 The mod only reads Herdr's own data. It makes no network requests, runs no programs and touches no files. The desk seating it remembers is kept in the mod's local storage.

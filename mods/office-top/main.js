@@ -2,7 +2,7 @@
 // desk group of its own; every local agent has a desk in its team's group.
 // Working: typing. Blocked: a red "!" (and a HELP! alarm after five minutes). Done: a green
 // check and confetti until you look. Idle: they get up and run around: coffee, the water
-// cooler, ping pong, the arcade, the windows, the couch (a nap after ten idle minutes).
+// cooler, ping pong, the arcade, the windows, the couch (after ten idle minutes, a nap now and then).
 // Agents on other machines join from the meeting room. An idle agent whose sub-agents are still
 // running stays in its chair. New agents come in the front door; closed ones leave. A dog lives here.
 // Hover anyone for details; click them to go to their terminal in the workspace.
@@ -36,6 +36,7 @@ const DOG_MOOD = ["Very good dog", "Would like a treat", "Tail status: wagging",
 const DAY_LENGTH = 0;
 const PERSON = 1.55; // how big people are, against a tile
 const NAP_AFTER = 10 * 60 * 1000;
+const NAP_CHANCE = 0.3; // once tired, how often a new stay is a nap (never two in a row)
 const ALARM_AFTER = 5 * 60 * 1000;
 const STAY = [45000, 120000]; // how long an idle agent stays somewhere before moving on
 
@@ -397,13 +398,18 @@ export default class OfficeTop extends View {
     }
   }
 
-  // Where an idle agent goes next: somewhere free, weighted; nappers take the couch.
+  // Where an idle agent goes next: somewhere free, weighted. A tired one (idle past NAP_AFTER)
+  // now and then naps on a couch seat or a beanbag, but never twice in a row.
   hangout(a, now, taken) {
     const h = this.hang[a.address];
     if (h && now < h.until) return h.spot;
-    const napping = now - (this.idleSince[a.address] ?? now) > NAP_AFTER;
+    const tired = now - (this.idleSince[a.address] ?? now) > NAP_AFTER;
     let pick = null;
-    if (napping) pick = NAP_SPOTS.find((s) => !taken.has(s) || h?.spot === s);
+    if (tired && !h?.nap && Math.random() < NAP_CHANCE) {
+      const beds = NAP_SPOTS.filter((s) => !taken.has(s) && s !== h?.spot);
+      pick = beds[Math.floor(Math.random() * beds.length)] ?? null;
+    }
+    const napping = pick !== null;
     if (!pick) {
       const free = HANGOUTS.filter(([s]) => !taken.has(s) && s !== h?.spot);
       let r = Math.random() * free.reduce((n, [, w]) => n + w, 0);
@@ -411,7 +417,7 @@ export default class OfficeTop extends View {
       pick ??= `stroll${Math.floor(Math.random() * 7)}`;
     }
     const stay = napping ? 5 * 60000 : STAY[0] + Math.random() * (STAY[1] - STAY[0]);
-    this.hang[a.address] = { spot: pick, until: now + stay, nap: napping && NAP_SPOTS.includes(pick) };
+    this.hang[a.address] = { spot: pick, until: now + stay, nap: napping };
     return pick;
   }
 
